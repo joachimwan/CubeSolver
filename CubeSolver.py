@@ -175,15 +175,38 @@ class Cube:
     
     plt.figure(figsize=[20,15], dpi=80, facecolor='white')
 
-    # Up
-    plt.subplot(3,4,2)
-    c, pos = [], []
+    c, pos = {}, {}
+    
+    # create empty dicts
+    for side in ["F", "B", "L", "R", "U", "D"]:
+      c[side] = []
+      pos[side] = []
+    
+    # retrieve face color
     for piece in cube.pieces:
       if piece.position[1]==1:
-        c.append(piece.color["U"])
-        pos.append(piece.position[0:3:2])
-    for i, p in enumerate(pos):
-      plt.plot(p[0], p[1], color=color[c[i]], marker='s', linestyle='None', markersize=80)
+        c["U"].append(piece.color["U"])
+        pos["U"].append(piece.position[0:3:2])
+      if piece.position[0]==-1:
+        c["L"].append(piece.color["L"])
+        pos["L"].append(piece.position[1:])
+      if piece.position[2]==1:
+        c["F"].append(piece.color["F"])
+        pos["F"].append(piece.position[:2])
+      if piece.position[0]==1:
+        c["R"].append(piece.color["R"])
+        pos["R"].append(piece.position[1:])
+      if piece.position[2]==-1:
+        c["B"].append(piece.color["B"])
+        pos["B"].append(piece.position[:2])
+      if piece.position[1]==-1:
+        c["D"].append(piece.color["D"])
+        pos["D"].append(piece.position[0:3:2])
+
+    # Up
+    plt.subplot(3,4,2)
+    for i, p in enumerate(pos["U"]):
+      plt.plot(p[0], p[1], color=color[c["U"][i]], marker='s', linestyle='None', markersize=80)
     plt.gca().invert_yaxis()
     plt.axis('equal')
     plt.xticks([-1.5,1.5])
@@ -192,13 +215,8 @@ class Cube:
 
     # Left
     plt.subplot(3,4,5)
-    c, pos = [], []
-    for piece in cube.pieces:
-      if piece.position[0]==-1:
-        c.append(piece.color["L"])
-        pos.append(piece.position[1:])
-    for i, p in enumerate(pos):
-      plt.plot(p[1], p[0], color=color[c[i]], marker='s', linestyle='None', markersize=80)
+    for i, p in enumerate(pos["L"]):
+      plt.plot(p[1], p[0], color=color[c["L"][i]], marker='s', linestyle='None', markersize=80)
     plt.axis('equal')
     plt.xticks([-1.5,1.5])
     plt.yticks([-1.5,1.5])
@@ -206,13 +224,8 @@ class Cube:
 
     # Front
     plt.subplot(3,4,6)
-    c, pos = [], []
-    for piece in cube.pieces:
-      if piece.position[2]==1:
-        c.append(piece.color["F"])
-        pos.append(piece.position[:2])
-    for i, p in enumerate(pos):
-      plt.plot(p[0], p[1], color=color[c[i]], marker='s', linestyle='None', markersize=80)
+    for i, p in enumerate(pos["F"]):
+      plt.plot(p[0], p[1], color=color[c["F"][i]], marker='s', linestyle='None', markersize=80)
     plt.axis('equal')
     plt.xticks([-1.5,1.5])
     plt.yticks([-1.5,1.5])
@@ -220,13 +233,8 @@ class Cube:
 
     # Right
     plt.subplot(3,4,7)
-    c, pos = [], []
-    for piece in cube.pieces:
-      if piece.position[0]==1:
-        c.append(piece.color["R"])
-        pos.append(piece.position[1:])
-    for i, p in enumerate(pos):
-      plt.plot(p[1], p[0], color=color[c[i]], marker='s', linestyle='None', markersize=80)
+    for i, p in enumerate(pos["R"]):
+      plt.plot(p[1], p[0], color=color[c["R"][i]], marker='s', linestyle='None', markersize=80)
     plt.gca().invert_xaxis()
     plt.axis('equal')
     plt.xticks([-1.5,1.5])
@@ -235,13 +243,8 @@ class Cube:
 
     # Back
     plt.subplot(3,4,8)
-    c, pos = [], []
-    for piece in cube.pieces:
-      if piece.position[2]==-1:
-        c.append(piece.color["B"])
-        pos.append(piece.position[:2])
-    for i, p in enumerate(pos):
-      plt.plot(p[0], p[1], color=color[c[i]], marker='s', linestyle='None', markersize=80)
+    for i, p in enumerate(pos["B"]):
+      plt.plot(p[0], p[1], color=color[c["B"][i]], marker='s', linestyle='None', markersize=80)
     plt.gca().invert_xaxis()
     plt.axis('equal')
     plt.xticks([-1.5,1.5])
@@ -250,13 +253,8 @@ class Cube:
 
     # Down
     plt.subplot(3,4,10)
-    c, pos = [], []
-    for piece in cube.pieces:
-      if piece.position[1]==-1:
-        c.append(piece.color["D"])
-        pos.append(piece.position[0:3:2])
-    for i, p in enumerate(pos):
-      plt.plot(p[0], p[1], color=color[c[i]], marker='s', linestyle='None', markersize=80)
+    for i, p in enumerate(pos["D"]):
+      plt.plot(p[0], p[1], color=color[c["D"][i]], marker='s', linestyle='None', markersize=80)
     plt.axis('equal')
     plt.xticks([-1.5,1.5])
     plt.yticks([-1.5,1.5])
