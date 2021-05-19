@@ -47,7 +47,7 @@ class Pieces:
 class Cube:
   def __init__(self):
     # initialize pieces
-    self.pieces = []    
+    self.pieces = []
     for x in range(3):
       for y in range(3):
         for z in range(3):
@@ -66,7 +66,7 @@ class Cube:
         piece.color["F"] = 1
       if piece.position[2] == -1:
         piece.color["B"] = 2
-      
+    
     print("A new Cube is initialized!\n")
   
   # get current state
@@ -79,7 +79,7 @@ class Cube:
             if np.array_equal(piece.position, np.array([x-1, y-1, z-1])):
               for side in ["F", "B", "L", "R", "U", "D"]:
                 if piece.color[side] is not 0:
-                  s.append(piece.color[side])          
+                  s.append(piece.color[side])
     return np.array(s).reshape(-1,1)
   
   # set current state to input state
@@ -95,7 +95,40 @@ class Cube:
                   piece.color[side] = s[0]
                   s = np.delete(s,0)
   
+  # move using input action e.g. ["F", "B", "U'"]
+  def move(self, action):
+    for a in action:
+      if a == "R":
+        self.rotate_right()
+      if a == "R'":
+        self.rotate_right_p()
+      if a == "L":
+        self.rotate_left()
+      if a == "L'":
+        self.rotate_left_p()
+      if a == "U":
+        self.rotate_up()
+      if a == "U'":
+        self.rotate_up_p()
+      if a == "D":
+        self.rotate_down()
+      if a == "D'":
+        self.rotate_down_p()
+      if a == "F":
+        self.rotate_front()
+      if a == "F'":
+        self.rotate_front_p()
+      if a == "B":
+        self.rotate_back()
+      if a == "B'":
+        self.rotate_back_p()
   
+  # helper function for MCTS: set cube to state, take action, return new state
+  def get_next_state(self, s, action):
+    self.set_state(s)
+    self.move(action)
+    return self.state()
+
   # find which pieces to rotate
   def rotate_right(self):
     for piece in self.pieces:
