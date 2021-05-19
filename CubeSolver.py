@@ -69,7 +69,7 @@ class Cube:
       
     print("A new Cube is initialized!\n")
   
-  # current state
+  # get current state
   def state(self):
     s = []
     for x in range(3):
@@ -81,6 +81,20 @@ class Cube:
                 if piece.color[side] is not 0:
                   s.append(piece.color[side])          
     return np.array(s).reshape(-1,1)
+  
+  # set current state to input state
+  def set_state(self, s):
+    s = s.reshape(1,-1)[0]
+    for x in range(3):
+      for y in range(3):
+        for z in range(3):
+          for piece in self.pieces:
+            if np.array_equal(piece.position, np.array([x-1, y-1, z-1])):
+              for side in ["F", "B", "L", "R", "U", "D"]:
+                if piece.color[side] is not 0:
+                  piece.color[side] = s[0]
+                  s = np.delete(s,0)
+  
   
   # find which pieces to rotate
   def rotate_right(self):
@@ -183,7 +197,7 @@ class Cube:
       pos[side] = []
     
     # retrieve face color
-    for piece in cube.pieces:
+    for piece in self.pieces:
       if piece.position[1]==1:
         c["U"].append(piece.color["U"])
         pos["U"].append(piece.position[0:3:2])
